@@ -14,9 +14,10 @@
 #' }
 startPinging <- function(wait = 30, ping = 2){
   print("PingR now active...")
+  stop_flag <- FALSE
   # Start job
   if(rstudioapi::isAvailable()) { #check api avilable
-    job::job({
+    job::job(ping_job = {
       previous_line <- "" #init
       repeat{
         current_line <- rstudioapi::getConsoleEditorContext()$contents #get console text
@@ -43,6 +44,19 @@ startPinging <- function(wait = 30, ping = 2){
 stopPinging <- function(){
   closeAllConnections()
 
-  rstudioapi::jobSetState("PingR active", state = "succeeded")
+  rstudioapi::jobSetState(ping_job, state = "succeeded")
   print("PingR now inactive...")
 }
+
+
+##IDEA:  Can I just store job as a script somewhere - inst folder? - and run as a parallel process i.e. with parallel package
+# library(parallel)
+# ncpu <- detectCores()
+# cl <- makeCluster(ncpu)
+# # full path to file that should execute
+# files <- c(...)
+# # use an lapply in parallel.
+# result <- parLapply(cl, files, source)
+# # Remember to close the cluster
+# stopCluster(cl)
+# # If anything is returned this can now be used.
