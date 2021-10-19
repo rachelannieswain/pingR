@@ -43,15 +43,28 @@ startPinging <- function(wait = 30, ping = 2) {
 
   # start job
   # assign job id as var in new environment
-  .pkgenv <- new.env()
-  .pkgenv$jobid <- rstudioapi::jobRunScript(script_file)
+  # pkgenv <- new.env()
+  # pkgenv$jobid <- rstudioapi::jobRunScript(script_file)
+  assign('jobid', rstudioapi::jobRunScript(script_file), pkgenv)
 }
 
 
+
+
+#' @title Stop notifications for finished code
+#'
+#' @return NULL
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' stopPinging()
+#' }
 stopPinging <- function() {
   # job_id <- .pkgglobalenv$jobid
-  rstudioapi::jobSetState(.pkgenv$jobid, state = "succeeded")
+  rstudioapi::jobSetState(pkgenv$jobid, state = "succeeded")
   print("PingR now inactive...")
 }
+
 
 
